@@ -50,7 +50,8 @@ class _LayOutState extends State<LayOut> {
         categoryColor: const Color(0xffF2D352)),
   ];
   int currentIndex = 0;
-
+  String searchQuery = "";
+  bool isSearching = false;
   @override
   Widget build(BuildContext context) {
     // var theme = Theme.of(context);
@@ -62,26 +63,58 @@ class _LayOutState extends State<LayOut> {
               DecorationImage(image: AssetImage("assets/images/pattern.png"))),
       child: Scaffold(
           appBar: AppBar(
-            actions: [
-              if (selectedCategoryData == null)
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.search_rounded,
-                    size: 40,
-                    color: Colors.white,
-                  ),
-                )
-            ],
-            title: Text(selectedCategoryData == null
+            toolbarHeight: 67,
+            title: isSearching
+                ? TextField(
+              decoration: const InputDecoration(
+                hintText: 'Search by title...',
+                hintStyle: TextStyle(color: Colors.white70),
+                border: InputBorder.none,
+              ),
+              style: const TextStyle(color: Colors.white),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value.toLowerCase();
+                });
+              },
+            )
+                : Text(selectedCategoryData == null
                 ? "News App"
                 : selectedCategoryData!.name),
+            actions: [
+              if (selectedCategoryData == null)
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: const Icon(
+              //     Icons.search_rounded,
+              //     size: 38,
+              //     color: Colors.white,
+              //   ),
+              // )
+                IconButton(
+                  icon: Icon(
+                    isSearching ? Icons.clear : Icons.search_rounded,
+                    size: 38,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isSearching = !isSearching;
+                      searchQuery =
+                          ""; // Reset the search query when closing the search bar
+                    });
+                  },
+                ),
+            ],
+            // title: Text(selectedCategoryData == null
+            //     ? "News App"
+            //     : selectedCategoryData!.name),
             backgroundColor: const Color(0xff39A552),
             centerTitle: true,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50))),
+                    bottomLeft: Radius.circular(35),
+                    bottomRight: Radius.circular(35))),
             iconTheme: const IconThemeData(size: 40, color: Colors.white),
           ),
           drawer: CostomDrawerWidget(
